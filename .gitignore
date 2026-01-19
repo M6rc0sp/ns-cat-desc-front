@@ -1,0 +1,59 @@
+# dependencies
+node_modules
+/node_modules
+
+# Yarn
+.yarn/
+.yarn/*
+!.yarn/releases
+!.yarn/patches
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.yarn/cache
+.pnp.*
+
+# testing
+/coverage
+
+# production build
+/dist
+build
+
+# misc
+.DS_Store
+*.pem
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# environment
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+.vscode-settings
+
+# Vite
+.vite
+/.vite
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# yarn
+.yarnrc.yml
+
+# Database (if exists)
+database.sqlite
+*.db
