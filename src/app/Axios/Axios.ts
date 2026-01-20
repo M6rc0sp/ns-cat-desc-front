@@ -4,10 +4,8 @@ import { getSessionToken } from '@tiendanube/nexo';
 import nexo from '../NexoClient';
 import { autoRegistrationStore } from '../AutoRegistrationStore/AutoRegistrationStore';
 
-const apiUrl = import.meta.env.VITE_API_URL || '/api';
-
 const axios = axiosApi.create({
-  baseURL: apiUrl,
+  baseURL: '/api',
   withCredentials: true,
 });
 
