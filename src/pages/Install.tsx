@@ -123,15 +123,6 @@ const InstallPage: React.FC = () => {
             </Box>
         </Box>
     );
-    onClick = {() => navigate('/')}
-                        >
-    Voltar ao App
-                        </Button >
-                    </Box >
-                )}
-            </Card >
-        </Box >
-    );
 };
 
 export default InstallPage;
