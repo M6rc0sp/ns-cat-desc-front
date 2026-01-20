@@ -4,9 +4,6 @@ import { Box, Text, Spinner, Card, Button } from '@nimbus-ds/components';
 // Importar o axios diretamente, não o do app que tem configuração do Nexo
 import axiosStandard from 'axios';
 
-// URL da API (sem barra no final para evitar duplicação)
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/$/, '');
-
 const InstallPage: React.FC = () => {
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
     const [message, setMessage] = useState<string>('Processando instalação...');
@@ -25,8 +22,8 @@ const InstallPage: React.FC = () => {
                     setStatus('loading');
                     setMessage('Conectando ao servidor de instalação...');
 
-                    // Fazer a chamada para o endpoint da API
-                    const response = await axiosStandard.get(`${API_URL}/ns/install?code=${code}`, {
+                    // Fazer a chamada para o endpoint da API (rota pública)
+                    const response = await axiosStandard.get(`/ns/install?code=${code}`, {
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
