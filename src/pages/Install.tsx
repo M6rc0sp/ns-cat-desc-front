@@ -22,8 +22,8 @@ const InstallPage: React.FC = () => {
                     setStatus('loading');
                     setMessage('Conectando ao servidor de instalação...');
 
-                    // Fazer a chamada para o endpoint da API (rota pública)
-                    const response = await axiosStandard.get(`/ns/install?code=${code}`, {
+                    // Fazer a chamada para o endpoint da API (através do proxy /api)
+                    const response = await axiosStandard.get(`/api/ns/install?code=${code}`, {
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
