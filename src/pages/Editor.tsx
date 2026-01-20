@@ -17,20 +17,6 @@ interface CategoryDescription {
     };
 }
 
-interface Category {
-    id: string | number;
-    name?: {
-        pt?: string;
-        es?: string;
-        en?: string;
-    };
-    description?: {
-        pt?: string;
-        es?: string;
-        en?: string;
-    };
-}
-
 export const EditorPage: React.FC = () => {
     const { categoryId: paramCategoryId } = useParams<{ categoryId?: string }>();
     const categoryId = paramCategoryId || '';
@@ -54,52 +40,50 @@ export const EditorPage: React.FC = () => {
     useEffect(() => {
         if (!categoryId) return;
 
-        const loadDescription = async () => {
+        const loadCategoryFromNuvemshop = async () => {
             try {
                 setIsLoading(true);
 
-                // Primeiro tenta carregar a descrição local
-                try {
-                    const response = await descriptionAPI.getByCategory(categoryId);
-                    if (response.data.success) {
-                        setDescription(response.data.data);
-                    }
-                } catch (error: any) {
-                    if (error.response?.status !== 404) {
-                        throw error;
-                    }
-                    // 404 é normal quando a categoria ainda não tem descrição
-                }
+                // Carrega a categoria diretamente da Nuvemshop (via nosso backend)
+                const response = await descriptionAPI.getByCategory(categoryId);
 
-                // Depois tenta carregar as categorias da Nuvemshop para pegar o nome
-                try {
-                    const categoriesResponse = await descriptionAPI.getCategories();
-                    if (categoriesResponse.data.success && Array.isArray(categoriesResponse.data.data)) {
-                        const category = categoriesResponse.data.data.find(
-                            (cat: Category) => cat.id.toString() === categoryId.toString()
-                        );
+                if (response.data.success && response.data.data) {
+                    const categoryData = response.data.data;
 
-                        if (category && category.name) {
-                            setCategoryName(
-                                category.name.pt || category.name.es || category.name.en || ''
-                            );
-                            setDescription(prev => ({
-                                ...prev,
-                                name: category.name,
-                            }));
+                    // Extrai o nome da categoria
+                    let name = '';
+                    if (categoryData.name) {
+                        if (typeof categoryData.name === 'string') {
+                            name = categoryData.name;
+                        } else {
+                            name = categoryData.name.pt || categoryData.name.es || categoryData.name.en || '';
                         }
                     }
-                } catch (error: any) {
-                    console.warn('Não foi possível carregar categorias da Nuvemshop:', error);
+                    setCategoryName(name);
+
+                    // Extrai a descrição existente
+                    const htmlContent = categoryData.html_content || '';
+
+                    setDescription({
+                        id: categoryData.id?.toString(),
+                        category_id: categoryId,
+                        content: categoryData.content || '',
+                        html_content: htmlContent,
+                        name: typeof categoryData.name === 'object' ? categoryData.name : { pt: name },
+                    });
                 }
             } catch (error: any) {
-                console.error('Erro ao carregar dados:', error);
+                console.error('Erro ao carregar categoria da Nuvemshop:', error);
+                // Se for 404, a categoria pode não existir ou não ter descrição
+                if (error.response?.status !== 404) {
+                    setMessage('Erro ao carregar dados da categoria');
+                }
             } finally {
                 setIsLoading(false);
             }
         };
 
-        loadDescription();
+        loadCategoryFromNuvemshop();
     }, [categoryId]);
 
     const handleSave = async () => {
@@ -123,29 +107,21 @@ export const EditorPage: React.FC = () => {
                 return;
             }
 
-            if (description.id) {
-                // Update
-                await descriptionAPI.update(description.id, {
-                    content: plainContent,
-                    html_content: plainContent,
-                });
-                setMessage('Descrição atualizada com sucesso!');
-            } else {
-                // Create
-                await descriptionAPI.create({
-                    category_id: categoryId,
-                    content: plainContent,
-                    html_content: plainContent,
-                });
-                setMessage('Descrição criada com sucesso!');
-            }
+            // Sempre usa update pois estamos atualizando a categoria na Nuvemshop
+            // O categoryId é o ID da categoria na Nuvemshop
+            await descriptionAPI.update(categoryId, {
+                content: plainContent,
+                html_content: plainContent,
+            });
+
+            setMessage('Descrição sincronizada com a Nuvemshop com sucesso!');
 
             setTimeout(() => setMessage(''), 3000);
         } catch (error: unknown) {
             console.error('Erro ao salvar:', error);
             const resp = (error as { response?: { data?: { message?: string } } })?.response;
-            const message = resp?.data?.message || (error as Error)?.message || 'Erro ao salvar a descrição';
-            setMessage(message);
+            const errorMessage = resp?.data?.message || (error as Error)?.message || 'Erro ao salvar a descrição';
+            setMessage(errorMessage);
         } finally {
             setIsSaving(false);
         }
