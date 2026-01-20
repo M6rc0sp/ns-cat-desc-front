@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Text, Spinner, Card, Button } from '@nimbus-ds/components';
+import { Box, Text, Spinner, Card, Button, Title } from '@nimbus-ds/components';
 // Importar o axios diretamente, não o do app que tem configuração do Nexo
 import axiosStandard from 'axios';
 
@@ -76,9 +76,9 @@ const InstallPage: React.FC = () => {
             backgroundColor="primary-surface"
         >
             <Box width="100%" style={{ maxWidth: '900px' }}>
-                <Card padding="large">
-                    <Box marginBottom="6" borderBottomWidth="1" borderBottomStyle="solid" borderBottomColor="neutral-surface" paddingBottom="4">
-                        <Text as="h2" fontSize="6" fontWeight="bold">Instalação do Aplicativo</Text>
+                <Card padding="base">
+                    <Box marginBottom="6" paddingBottom="4">
+                        <Title as="h2">Instalação do Aplicativo</Title>
                     </Box>
                     <Box
                         display="flex"
@@ -89,14 +89,14 @@ const InstallPage: React.FC = () => {
                     >
                         {status === 'loading' && (
                             <Box display="flex" flexDirection="column" alignItems="center" gap="4">
-                                <Spinner size="large" />
+                                <Spinner size="medium" />
                                 <Text color="neutral-textLow">Isso deve levar apenas alguns instantes...</Text>
                             </Box>
                         )}
 
                         <Text
                             textAlign="center"
-                            fontSize="4"
+                            fontSize="highlight"
                             fontWeight={status === 'error' ? 'bold' : 'regular'}
                             color={
                                 status === 'error'
