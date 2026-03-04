@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Editor } from '@nimbus-ds/editor';
 import './RichTextEditor.css';
 
@@ -19,35 +19,45 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     placeholder = 'Digite aqui...',
     minHeight = '300px',
 }) => {
-    const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
-        const clipboardData = e.clipboardData;
-        const types = Array.from(clipboardData.types);
+    // Listener no document em fase de CAPTURE — dispara antes do editor interceptar
+    useEffect(() => {
+        const handlePasteCapture = (e: ClipboardEvent) => {
+            const clipboardData = e.clipboardData;
+            if (!clipboardData) return;
 
-        console.group('🔍 [DEBUG CLIPBOARD] Evento de paste capturado');
-        console.log('Tipos disponíveis no clipboard:', types);
+            const types = Array.from(clipboardData.types);
 
-        types.forEach((type) => {
-            const data = clipboardData.getData(type);
-            console.group(`📋 Tipo: "${type}"`);
-            console.log(data || '(vazio)');
-            console.groupEnd();
-        });
+            console.group('🔍 [DEBUG CLIPBOARD - capture phase]');
+            console.log('Tipos disponíveis:', types);
 
-        // Verifica itens (para imagens ou arquivos)
-        if (clipboardData.items.length > 0) {
-            console.group('📦 Items no clipboard:');
-            Array.from(clipboardData.items).forEach((item, i) => {
-                console.log(`Item [${i}]: kind="${item.kind}", type="${item.type}"`);
-                if (item.kind === 'file') {
-                    const file = item.getAsFile();
-                    console.log(`  → Arquivo: ${file?.name} (${file?.size} bytes)`);
-                }
+            types.forEach((type) => {
+                const data = clipboardData.getData(type);
+                console.group(`📋 "${type}"`);
+                console.log(data || '(vazio)');
+                console.groupEnd();
             });
-            console.groupEnd();
-        }
 
-        console.groupEnd();
-    };
+            if (clipboardData.items.length > 0) {
+                console.group('📦 Items:');
+                Array.from(clipboardData.items).forEach((item, i) => {
+                    console.log(`[${i}] kind="${item.kind}", type="${item.type}"`);
+                    if (item.kind === 'file') {
+                        const file = item.getAsFile();
+                        console.log(`  → ${file?.name} (${file?.size} bytes)`);
+                    }
+                });
+                console.groupEnd();
+            }
+
+            console.groupEnd();
+        };
+
+        // true = capture phase, dispara antes de qualquer handler do editor
+        document.addEventListener('paste', handlePasteCapture, true);
+        return () => {
+            document.removeEventListener('paste', handlePasteCapture, true);
+        };
+    }, []);
 
     return (
         <div
@@ -58,7 +68,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
                 borderRadius: '4px',
                 overflow: 'hidden',
             }}
-            onPaste={handlePaste}
         >
             <Editor
                 value={value}
