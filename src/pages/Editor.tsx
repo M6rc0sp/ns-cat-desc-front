@@ -42,6 +42,7 @@ export const EditorPage: React.FC = () => {
         () => localStorage.getItem(CLIPBOARD_KEY)
     );
     const [copyToast, setCopyToast] = useState(false);
+    const [editorKey, setEditorKey] = useState(0);
 
     const handleCopyDescription = () => {
         const html = description.html_content.trim();
@@ -55,6 +56,7 @@ export const EditorPage: React.FC = () => {
     const handlePasteDescription = () => {
         if (!clipboardHtml) return;
         setDescription(prev => ({ ...prev, html_content: clipboardHtml }));
+        setEditorKey(k => k + 1);
     };
 
     useEffect(() => {
@@ -238,6 +240,7 @@ export const EditorPage: React.FC = () => {
                                 </Box>
                             )}
                             <RichTextEditor
+                                key={editorKey}
                                 value={description.html_content}
                                 onChange={(content) => {
                                     console.log('RichTextEditor onChange:', content);
