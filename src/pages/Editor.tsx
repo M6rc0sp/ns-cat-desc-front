@@ -5,6 +5,8 @@ import { RichTextEditor } from '@/components/RichTextEditor';
 import { descriptionAPI } from '@/app/api';
 import styles from './Editor.module.css';
 
+const CLIPBOARD_KEY = 'ns_desc_clipboard';
+
 interface CategoryDescription {
     id?: string;
     category_id: string;
@@ -36,6 +38,24 @@ export const EditorPage: React.FC = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [message, setMessage] = useState('');
     const [categoryName, setCategoryName] = useState('');
+    const [clipboardHtml, setClipboardHtml] = useState<string | null>(
+        () => localStorage.getItem(CLIPBOARD_KEY)
+    );
+    const [copyToast, setCopyToast] = useState(false);
+
+    const handleCopyDescription = () => {
+        const html = description.html_content.trim();
+        if (!html) return;
+        localStorage.setItem(CLIPBOARD_KEY, html);
+        setClipboardHtml(html);
+        setCopyToast(true);
+        setTimeout(() => setCopyToast(false), 2500);
+    };
+
+    const handlePasteDescription = () => {
+        if (!clipboardHtml) return;
+        setDescription(prev => ({ ...prev, html_content: clipboardHtml }));
+    };
 
     useEffect(() => {
         if (!categoryId) return;
@@ -183,11 +203,40 @@ export const EditorPage: React.FC = () => {
                         )}
 
                         <Box marginBottom="4">
-                            <Box marginBottom="2">
+                            <Box marginBottom="2" display="flex" justifyContent="space-between" alignItems="center">
                                 <Text fontWeight="bold">
                                     Descrição da Categoria
                                 </Text>
+                                <Box display="flex" gap="2">
+                                    <Button
+                                        appearance="neutral"
+                                        onClick={handleCopyDescription}
+                                        disabled={!description.html_content.trim()}
+                                    >
+                                        Copiar descrição
+                                    </Button>
+                                    {clipboardHtml && (
+                                        <Button
+                                            appearance="neutral"
+                                            onClick={handlePasteDescription}
+                                        >
+                                            Colar descrição copiada
+                                        </Button>
+                                    )}
+                                </Box>
                             </Box>
+                            {copyToast && (
+                                <Box
+                                    marginBottom="2"
+                                    padding="2"
+                                    backgroundColor="success-surface"
+                                    borderRadius="base"
+                                >
+                                    <Text color="success-textHigh" fontSize="caption">
+                                        ✓ Descrição copiada — disponível para colar em qualquer categoria
+                                    </Text>
+                                </Box>
+                            )}
                             <RichTextEditor
                                 value={description.html_content}
                                 onChange={(content) => {
