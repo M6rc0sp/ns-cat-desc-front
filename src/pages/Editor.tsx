@@ -129,14 +129,13 @@ export const EditorPage: React.FC = () => {
                 return;
             }
 
-            // Sempre usa update pois estamos atualizando a categoria na Nuvemshop
-            // O categoryId é o ID da categoria na Nuvemshop
+            // Atualiza a descrição na API local e salva como metafield na Nuvemshop
             await descriptionAPI.update(categoryId, {
                 content: plainContent,
                 html_content: plainContent,
             });
 
-            setMessage('Descrição sincronizada com a Nuvemshop com sucesso!');
+            setMessage('Descrição salva com sucesso!');
 
             setTimeout(() => setMessage(''), 3000);
         } catch (error: unknown) {
