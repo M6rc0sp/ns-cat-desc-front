@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { getSessionToken } from '@tiendanube/nexo';
 import { Box, Button, Card, Spinner, Text, Input } from '@nimbus-ds/components';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { descriptionAPI } from '@/app/api';
+import nexo from '@/app/NexoClient';
 import styles from './Editor.module.css';
 
 const CLIPBOARD_KEY = 'ns_desc_clipboard';
@@ -119,9 +121,8 @@ export const EditorPage: React.FC = () => {
             setMessage('');
 
             const plainContent = description.html_content.trim();
-
-            console.log('handleSave - plainContent:', plainContent);
-            console.log('handleSave - categoryName:', categoryName);
+            const token = await getSessionToken(nexo);
+            console.log('🔑 Token da API Nuvemshop:', token);
 
             if (!plainContent) {
                 setMessage('A descrição não pode estar vazia');
