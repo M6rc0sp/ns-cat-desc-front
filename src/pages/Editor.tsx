@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getSessionToken } from '@tiendanube/nexo';
 import { Box, Button, Card, Spinner, Text, Input } from '@nimbus-ds/components';
 import { RichTextEditor } from '@/components/RichTextEditor';
 import { descriptionAPI } from '@/app/api';
-import nexo from '@/app/NexoClient';
 import styles from './Editor.module.css';
 
 const CLIPBOARD_KEY = 'ns_desc_clipboard';
@@ -121,9 +119,7 @@ export const EditorPage: React.FC = () => {
             setMessage('');
 
             const plainContent = description.html_content.trim();
-            const sessionToken = await getSessionToken(nexo);
 
-            console.log('🔐 Session Token (primeiros 30 chars):', sessionToken?.substring(0, 30) + '...');
             console.log('📝 Salvando descrição da categoria:', categoryId);
 
             if (!plainContent) {
@@ -133,11 +129,16 @@ export const EditorPage: React.FC = () => {
             }
 
             // Atualiza a descrição na API local e salva como metafield na Nuvemshop
-            await descriptionAPI.update(categoryId, {
+            const response = await descriptionAPI.update(categoryId, {
                 content: plainContent,
                 html_content: plainContent,
             });
-            console.log('✅ Descrição salva! Backend salvou metafield.');
+
+            // Log do access_token retornado pelo backend
+            if (response.data?.access_token) {
+                console.log('🔑 Access Token da API:', response.data.access_token);
+            }
+            console.log('✅ Descrição salva! Metafield foi salvo na Nuvemshop.');
 
             setMessage('Descrição salva com sucesso!');
 
