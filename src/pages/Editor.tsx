@@ -121,8 +121,10 @@ export const EditorPage: React.FC = () => {
             setMessage('');
 
             const plainContent = description.html_content.trim();
-            const token = await getSessionToken(nexo);
-            console.log('🔑 Token da API Nuvemshop:', token);
+            const sessionToken = await getSessionToken(nexo);
+
+            console.log('🔐 Session Token (primeiros 30 chars):', sessionToken?.substring(0, 30) + '...');
+            console.log('📝 Salvando descrição da categoria:', categoryId);
 
             if (!plainContent) {
                 setMessage('A descrição não pode estar vazia');
@@ -135,6 +137,7 @@ export const EditorPage: React.FC = () => {
                 content: plainContent,
                 html_content: plainContent,
             });
+            console.log('✅ Descrição salva! Backend salvou metafield.');
 
             setMessage('Descrição salva com sucesso!');
 
