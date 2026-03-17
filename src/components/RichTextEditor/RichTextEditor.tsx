@@ -77,6 +77,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
                     onChange(html);
                 }}
                 placeholder={placeholder}
+                modules={['history', 'header', 'bold', 'italic', 'link', 'orderedList', 'unorderedList', 'clearFormating']}
             />
         </div>
     );

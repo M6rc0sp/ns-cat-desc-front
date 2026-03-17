@@ -53,24 +53,41 @@
   outline: none;
   min-height: 250px;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.8;
   color: #333;
 }
 
 .rich-text-editor-content p {
   margin: 0 0 12px 0;
+  line-height: 1.8;
 }
 
-.rich-text-editor-content h1,
-.rich-text-editor-content h2,
-.rich-text-editor-content h3 {
-  margin: 12px 0 8px 0;
-  font-weight: 600;
-  line-height: 1.2;
+.rich-text-editor-content h1 {
+  font-size: 28px;
+  margin: 20px 0 12px 0;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .rich-text-editor-content h2 {
+  font-size: 24px;
+  margin: 16px 0 10px 0;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.rich-text-editor-content h3 {
   font-size: 20px;
+  margin: 14px 0 8px 0;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.rich-text-editor-content h4 {
+  font-size: 16px;
+  margin: 12px 0 8px 0;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 .rich-text-editor-content ul,
