@@ -4,6 +4,21 @@
   background: white;
 }
 
+/* ================== ÁREA DE EDIÇÃO (DENTRO DO EDITOR) ================== */
+/* Aumentar espaçamento de linhas enquanto o usuário digita */
+.rich-text-editor [contenteditable="true"],
+.rich-text-editor [role="textbox"] {
+  line-height: 1.8 !important;
+  padding: 16px !important;
+}
+
+.rich-text-editor [contenteditable="true"] p,
+.rich-text-editor [contenteditable="true"] h3,
+.rich-text-editor [contenteditable="true"] h4 {
+  line-height: 1.8 !important;
+  margin-bottom: 12px !important;
+}
+
 .rich-text-editor-toolbar {
   display: flex;
   gap: 8px;
