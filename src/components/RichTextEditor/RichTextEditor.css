@@ -4,31 +4,6 @@
   background: white;
 }
 
-/* Estilos para a área editável do Nimbus Editor */
-.rich-text-editor [contenteditable],
-.rich-text-editor [class*="contenteditable"],
-.rich-text-editor [class*="editor-content"],
-.rich-text-editor [class*="editable"] {
-  line-height: 1.8 !important;
-}
-
-/* Específico para o Editor do Nimbus DS */
-.rich-text-editor .nimbus-editor__content,
-.rich-text-editor [role="textbox"],
-.rich-text-editor [class*="editor"] [role="textbox"] {
-  line-height: 1.8 !important;
-  padding: 16px !important;
-}
-
-/* Headings e parágrafos dentro do editor */
-.rich-text-editor [contenteditable] h1,
-.rich-text-editor [contenteditable] h2,
-.rich-text-editor [contenteditable] h3,
-.rich-text-editor [contenteditable] h4,
-.rich-text-editor [contenteditable] p {
-  line-height: 1.8 !important;
-}
-
 .rich-text-editor-toolbar {
   display: flex;
   gap: 8px;
@@ -73,6 +48,9 @@
   margin: 0 4px;
 }
 
+/* ================== Conteúdo Resultante (NÃO do editor) ================== */
+/* Estes estilos afetam como o conteúdo é exibido FORA do editor */
+
 .rich-text-editor-content {
   padding: 12px;
   outline: none;
@@ -85,20 +63,6 @@
 .rich-text-editor-content p {
   margin: 0 0 12px 0;
   line-height: 1.8;
-}
-
-.rich-text-editor-content h1 {
-  font-size: 28px;
-  margin: 20px 0 12px 0;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.rich-text-editor-content h2 {
-  font-size: 24px;
-  margin: 16px 0 10px 0;
-  font-weight: 700;
-  line-height: 1.3;
 }
 
 .rich-text-editor-content h3 {
@@ -124,6 +88,7 @@
 .rich-text-editor-content ul li,
 .rich-text-editor-content ol li {
   margin: 4px 0;
+  line-height: 1.8;
 }
 
 .rich-text-editor-content strong {
@@ -148,4 +113,5 @@
   padding-left: 12px;
   color: #666;
   font-style: italic;
+  line-height: 1.8;
 }

@@ -12,32 +12,3 @@ body {
   max-width: 100vw;
 }
 
-/* ==================== Nimbus Editor - Line Height ==================== */
-/* Aumentar espaçamento de linhas na área de edição para melhor legibilidade */
-
-/* Área editável do Nimbus Editor */
-[contenteditable="true"] {
-  line-height: 1.8 !important;
-}
-
-/* Role textbox (usado por editors modernos) */
-[role="textbox"] {
-  line-height: 1.8 !important;
-}
-
-/* Elementos dentro da área editável */
-[contenteditable="true"] p,
-[contenteditable="true"] h1,
-[contenteditable="true"] h2,
-[contenteditable="true"] h3,
-[contenteditable="true"] h4,
-[contenteditable="true"] li {
-  line-height: 1.8 !important;
-}
-
-/* Classe Nimbus específica (se existir) */
-.nimbus-editor__content,
-.nimbus-editor__textarea,
-[class*="nimbus"][class*="editor"] {
-  line-height: 1.8 !important;
-}
