@@ -4,6 +4,31 @@
   background: white;
 }
 
+/* Estilos para a área editável do Nimbus Editor */
+.rich-text-editor [contenteditable],
+.rich-text-editor [class*="contenteditable"],
+.rich-text-editor [class*="editor-content"],
+.rich-text-editor [class*="editable"] {
+  line-height: 1.8 !important;
+}
+
+/* Específico para o Editor do Nimbus DS */
+.rich-text-editor .nimbus-editor__content,
+.rich-text-editor [role="textbox"],
+.rich-text-editor [class*="editor"] [role="textbox"] {
+  line-height: 1.8 !important;
+  padding: 16px !important;
+}
+
+/* Headings e parágrafos dentro do editor */
+.rich-text-editor [contenteditable] h1,
+.rich-text-editor [contenteditable] h2,
+.rich-text-editor [contenteditable] h3,
+.rich-text-editor [contenteditable] h4,
+.rich-text-editor [contenteditable] p {
+  line-height: 1.8 !important;
+}
+
 .rich-text-editor-toolbar {
   display: flex;
   gap: 8px;
