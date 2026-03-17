@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Editor } from '@nimbus-ds/editor';
 import './RichTextEditor.css';
 
@@ -14,23 +14,37 @@ interface RichTextEditorProps {
  * O editor Nimbus só suporta H3 e H4, mas queremos salvar como H2 e H3
  */
 const transformHeadingsForOutput = (html: string): string => {
-    return html
-        .replace(/<h3([^>]*)>/g, '<h2$1>') // H3 → H2
-        .replace(/<\/h3>/g, '</h2>')
-        .replace(/<h4([^>]*)>/g, '<h3$1>') // H4 → H3
-        .replace(/<\/h4>/g, '</h3>');
+    const result = html
+        .replace(/<h3([^>]*)>/gi, '<h2$1>')
+        .replace(/<\/h3>/gi, '</h2>')
+        .replace(/<h4([^>]*)>/gi, '<h3$1>')
+        .replace(/<\/h4>/gi, '</h3>');
+    
+    if (result !== html) {
+        console.log('✅ [transformHeadingsForOutput] H3→H2, H4→H3');
+        console.log('   Antes: ', html.substring(0, 80));
+        console.log('   Depois:', result.substring(0, 80));
+    }
+    return result;
 };
 
 /**
- * Transforma headings: H2→H3, H3→H4
- * Quando recebemos conteúdo de volta, convertemos para o que o editor entende
+ * Transforma headings: H2→H3, H1→H3
+ * Quando recebemos conteúdo H2, convertemos para H3 para o editor entender
  */
 const transformHeadingsForEditor = (html: string): string => {
-    return html
-        .replace(/<h2([^>]*)>/g, '<h3$1>') // H2 → H3
-        .replace(/<\/h2>/g, '</h3>')
-        .replace(/<h1([^>]*)>/g, '<h3$1>') // H1 → H3 (caso venha H1)
-        .replace(/<\/h1>/g, '</h3>');
+    const result = html
+        .replace(/<h2([^>]*)>/gi, '<h3$1>')
+        .replace(/<\/h2>/gi, '</h3>')
+        .replace(/<h1([^>]*)>/gi, '<h3$1>')
+        .replace(/<\/h1>/gi, '</h3>');
+    
+    if (result !== html) {
+        console.log('✅ [transformHeadingsForEditor] H2→H3, H1→H3');
+        console.log('   Antes: ', html.substring(0, 80));
+        console.log('   Depois:', result.substring(0, 80));
+    }
+    return result;
 };
 
 /**
@@ -44,6 +58,11 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     placeholder = 'Digite aqui...',
     minHeight = '300px',
 }) => {
+    // Transforma o value que vem do componente pai (H2/H1) para H3/H4 que o editor entende
+    const transformedValue = useMemo(() => {
+        return transformHeadingsForEditor(value);
+    }, [value]);
+
     // Listener no document em fase de CAPTURE — dispara antes do editor interceptar
     useEffect(() => {
         const handlePasteCapture = (e: ClipboardEvent) => {
@@ -95,12 +114,11 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             }}
         >
             <Editor
-                value={transformHeadingsForEditor(value)}
+                value={transformedValue}
                 parser="html"
                 onChange={(html: string) => {
-                    console.log('RichTextEditor onChange (HTML antes da transformação):', html);
+                    // Transforma H3→H2, H4→H3 antes de passar pro componente pai
                     const transformed = transformHeadingsForOutput(html);
-                    console.log('RichTextEditor onChange (HTML após transformação):', transformed);
                     onChange(transformed);
                 }}
                 placeholder={placeholder}
