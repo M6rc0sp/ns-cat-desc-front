@@ -12,3 +12,27 @@ body {
   max-width: 100vw;
 }
 
+/* ================== Estilos do Conteúdo Resultante ================== */
+/* Aplicar line-height ao conteúdo renderizado */
+
+.rich-text-content h3,
+.rich-text-content h4,
+.rich-text-content p {
+  line-height: 1.5;
+}
+
+/* ================== ÁREA DE EDIÇÃO (NIMBUS EDITOR) ================== */
+/* Aumentar espaçamento de linhas enquanto o usuário digita */
+
+[contenteditable="true"],
+[role="textbox"] {
+  line-height: 1.4 !important;
+  padding: 12px !important;
+}
+
+[contenteditable="true"] p,
+[contenteditable="true"] h3,
+[contenteditable="true"] h4 {
+  line-height: 1.4 !important;
+  margin-bottom: 8px !important;
+}

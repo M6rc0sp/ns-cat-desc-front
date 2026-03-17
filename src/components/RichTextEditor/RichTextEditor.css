@@ -8,15 +8,15 @@
 /* Aumentar espaçamento de linhas enquanto o usuário digita */
 .rich-text-editor [contenteditable="true"],
 .rich-text-editor [role="textbox"] {
-  line-height: 1.8 !important;
-  padding: 16px !important;
+  line-height: 1.4 !important;
+  padding: 12px !important;
 }
 
 .rich-text-editor [contenteditable="true"] p,
 .rich-text-editor [contenteditable="true"] h3,
 .rich-text-editor [contenteditable="true"] h4 {
-  line-height: 1.8 !important;
-  margin-bottom: 12px !important;
+  line-height: 1.4 !important;
+  margin-bottom: 8px !important;
 }
 
 .rich-text-editor-toolbar {
@@ -71,13 +71,13 @@
   outline: none;
   min-height: 250px;
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.5;
   color: #333;
 }
 
 .rich-text-editor-content p {
   margin: 0 0 12px 0;
-  line-height: 1.8;
+  line-height: 1.5;
 }
 
 .rich-text-editor-content h3 {
@@ -103,7 +103,7 @@
 .rich-text-editor-content ul li,
 .rich-text-editor-content ol li {
   margin: 4px 0;
-  line-height: 1.8;
+  line-height: 1.5;
 }
 
 .rich-text-editor-content strong {
@@ -128,5 +128,5 @@
   padding-left: 12px;
   color: #666;
   font-style: italic;
-  line-height: 1.8;
+  line-height: 1.5;
 }
