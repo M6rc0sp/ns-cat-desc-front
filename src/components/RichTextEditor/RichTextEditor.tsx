@@ -10,8 +10,33 @@ interface RichTextEditorProps {
 }
 
 /**
+ * Transforma headings: H3→H2, H4→H3
+ * O editor Nimbus só suporta H3 e H4, mas queremos salvar como H2 e H3
+ */
+const transformHeadingsForOutput = (html: string): string => {
+    return html
+        .replace(/<h3([^>]*)>/g, '<h2$1>') // H3 → H2
+        .replace(/<\/h3>/g, '</h2>')
+        .replace(/<h4([^>]*)>/g, '<h3$1>') // H4 → H3
+        .replace(/<\/h4>/g, '</h3>');
+};
+
+/**
+ * Transforma headings: H2→H3, H3→H4
+ * Quando recebemos conteúdo de volta, convertemos para o que o editor entende
+ */
+const transformHeadingsForEditor = (html: string): string => {
+    return html
+        .replace(/<h2([^>]*)>/g, '<h3$1>') // H2 → H3
+        .replace(/<\/h2>/g, '</h3>')
+        .replace(/<h1([^>]*)>/g, '<h3$1>') // H1 → H3 (caso venha H1)
+        .replace(/<\/h1>/g, '</h3>');
+};
+
+/**
  * Componente RichTextEditor - Wrapper do Nimbus DS Editor
  * Usa parser="html" para entrada e saída em HTML
+ * Transforma automaticamente H3→H2 e H4→H3
  */
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     value,
@@ -70,11 +95,13 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             }}
         >
             <Editor
-                value={value}
+                value={transformHeadingsForEditor(value)}
                 parser="html"
                 onChange={(html: string) => {
-                    console.log('RichTextEditor onChange (HTML):', html);
-                    onChange(html);
+                    console.log('RichTextEditor onChange (HTML antes da transformação):', html);
+                    const transformed = transformHeadingsForOutput(html);
+                    console.log('RichTextEditor onChange (HTML após transformação):', transformed);
+                    onChange(transformed);
                 }}
                 placeholder={placeholder}
             />
